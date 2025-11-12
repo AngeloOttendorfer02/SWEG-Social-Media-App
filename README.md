@@ -1,38 +1,55 @@
-# SWEG-Social-Media-App
+# 🧩 SWEG Social Media App – Exercise Part 1: Automation
 
-# 🧩 Exercise Part 1 – Automation
+This project is the **first step in developing a simple social media application**.  
+The goal of this exercise is to design a small Python program that stores and retrieves social media posts from a database and to automate testing using GitHub Actions.
 
-This is the first step in developing a simple social media app.  
-The goal is to store social media posts in a database with the following fields:
-- Image  
-- Text (comment)  
-- User  
+---
 
-## 📝 TODO
+## 📘 Exercise Description
 
-### 1. Setup Environment
-- [ ] Create GitHub accounts for all team members.  
-- [ ] Create a shared GitHub repository for the project.  
-- [ ] Invite all group members to collaborate on the repository.  
+### Objective
+Develop a Python application that can:
+- Store **social media posts** in a database containing:
+  - 🖼️ Image  
+  - 💬 Text (comment)  
+  - 👤 User  
+- Retrieve the **latest post** from the database.
 
-### 2. Develop Python Application
-- [ ] Define post information with the following fields:
-  - Image  
-  - Text (comment)  
-  - User  
-- [ ] Store posts in a database (e.g., SQLite).  
-- [ ] Implement functionality to retrieve the **latest post** from the database.  
 
-### 3. Test the Application
-- [ ] Write and run unit tests for database storage and retrieval logic.  
-- [ ] Verify that the application runs correctly.  
+---
 
-### 4. Configure GitHub Actions
-- [ ] Add a GitHub Actions workflow to:
-  - Automatically run tests.  
-  - Execute tests **only on pull requests**.  
-- [ ] Ensure all tests pass in the CI pipeline.  
+## ⚙️ Steps to Complete
+ 
 
-### 5. Final Steps
+### 1. Develop Python Application
+- [ ] Define the post information (image, text, user).  
+- [ ] Store multiple posts in a **SQLite database**.  
+- [ ] Implement functionality to **retrieve the latest post**.
+
+### 2. Test the Application
+- [ ] Write unit tests to verify database storage and retrieval logic.  
+- [ ] Ensure the program runs correctly and returns the expected data.
+
+### 3. Configure GitHub Actions
+- [ ] Create a **GitHub Actions workflow** that:
+  - Automatically runs tests on pull requests.  
+  - Ensures all tests pass before merging.  
+
+### 4. Final Steps
 - [ ] Commit all developed code and workflow configurations.  
-- [ ] Push the final version to GitHub.  
+- [ ] Push the final version to GitHub.
+
+---
+
+## 👥 Contribution
+
+| Task Area | Angelo Ottendorfer | Martin Ferschl |
+|------------|------------------------------|--------------------------------|
+| **1. Python Application** | Implement `database.py` (SQLite setup, add/retrieve posts) | Support by testing functions manually |
+| **3. Testing** | Provide testable database functions | Create `tests/test_app.py` using `pytest` |
+| **4. GitHub Actions** | Review pipeline configuration | Create `.github/workflows/ci.yml` and ensure CI runs only on pull requests |
+| **5. Final Steps** | Commit app code | Commit tests + CI config and verify all tests pass |
+| **Branch** | `feature/backend` | `feature/tests-ci` |
+
+
+
