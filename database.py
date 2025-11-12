@@ -1,12 +1,7 @@
-import sqlite3
 from datetime import datetime
 
-DB_NAME = "social_media.db"
-
-
-def create_table():
+def create_table(conn):
     """Create posts table if it doesn't exist."""
-    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS posts (
@@ -18,24 +13,20 @@ def create_table():
         )
     """)
     conn.commit()
-    conn.close()
 
 
-def add_post(image: str, text: str, user: str):
+def add_post(conn, image: str, text: str, user: str):
     """Insert a new post into the database."""
-    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO posts (image, text, user, created_at)
         VALUES (?, ?, ?, ?)
-    """, (image, text, user, datetime.now()))
+    """, (image, text, user, datetime.now().isoformat()))
     conn.commit()
-    conn.close()
 
 
-def get_latest_post():
+def get_latest_post(conn):
     """Retrieve the most recent post."""
-    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("""
         SELECT image, text, user, created_at
@@ -44,5 +35,4 @@ def get_latest_post():
         LIMIT 1
     """)
     post = cursor.fetchone()
-    conn.close()
     return post
