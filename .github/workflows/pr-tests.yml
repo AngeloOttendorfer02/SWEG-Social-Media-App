@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     name: Run pytest
+    shell: bash
     run: |
     export PYTHONPATH=$PYTHONPATH:$(pwd)
     pytest -q
