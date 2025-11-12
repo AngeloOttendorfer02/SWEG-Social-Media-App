@@ -13,7 +13,7 @@ def main():
 
         # Example posts
         posts = [
-            ("image1.png", "First post in the second ci-test!", "Alice"),
+            ("image1.png", "First post in the third ci-test!", "Alice"),
             ("image2.png", "Having a great day!", "Bob"),
             ("image3.png", "Just finished coding!", "Charlie")
         ]
