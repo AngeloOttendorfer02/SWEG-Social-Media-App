@@ -50,6 +50,7 @@ Develop a Python application that can:
 | **4. GitHub Actions** | Review pipeline configuration | Create `.github/workflows/ci.yml` and ensure CI runs only on pull requests |
 | **5. Final Steps** | Commit app code | Commit tests + CI config and verify all tests pass |
 | **Branch** | `feature/backend` | `feature/tests-ci` |
+| **Time Required** | 0.5h - 1h | 0.5h - 1h |
 
 
 
