@@ -45,11 +45,11 @@ Develop a Python application that can:
 
 | Task Area | Angelo Ottendorfer | Martin Ferschl |
 |------------|------------------------------|--------------------------------|
-| **1. Python Application** | Implement `database.py` (SQLite setup, add/retrieve posts) | Support by testing functions manually |
+| **1. Python Application** | Implement `database.py` (SQLite setup, add/retrieve posts) | Support by testing functions manually, react setup |
 | **3. Testing** | Provide testable database functions | Create `tests/test_app.py` using `pytest` |
 | **4. GitHub Actions** | Review pipeline configuration | Create `.github/workflows/ci.yml` and ensure CI runs only on pull requests |
 | **5. Final Steps** | Commit app code | Commit tests + CI config and verify all tests pass |
-| **Branch** | `feature/backend` | `feature/testing` |
+| **Branch** | `feature/backend` | `react` |
 
 
 
