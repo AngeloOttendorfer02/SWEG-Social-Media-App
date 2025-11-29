@@ -1,4 +1,4 @@
-# 🧩 SWEG Social Media App – Exercise Part 1: Automation
+# 🧩 Exercise Part 1: Automation
 
 This project is the **first step in developing a simple social media application**.  
 The goal of this exercise is to design a small Python program that stores and retrieves social media posts from a database and to automate testing using GitHub Actions.
@@ -52,4 +52,57 @@ Develop a Python application that can:
 | **Branch** | `feature/backend` | `react` |
 
 
+# 🧩 Exercise Part 2: REST API
+
+This project is the **next step in developing the simple social media application**.  
+The goal of this exercise is to create a REST API to expose the functionality developed in Part 1 and integrate it with a **React web frontend**.
+
+---
+
+## 📘 Exercise Description
+
+### Objective
+Develop a REST API and a web application that can:  
+- **Send, retrieve, and search social media posts** via API endpoints.  
+- Expose the functionality of the Python application from Part 1.  
+- Provide a **React frontend** to interact with the API.
+
+---
+
+## ⚙️ Steps to Complete
+
+### 1. Develop REST API
+- [ ] Implement API endpoints to:
+  - Submit a new post  
+  - Retrieve posts  
+  - Search posts by user or content
+- [ ] Provide an **FastAPI specification** for your REST API.  
+
+### 2. Expand Testing
+- [ ] Extend the testing framework to include API tests (e.g., using `pytest` + `requests`).  
+- [ ] Ensure all API endpoints work as expected.  
+
+### 3. Create Web Application
+- [ ] Develop a **React frontend** that can:
+  - Submit a post  
+  - List and display all posts  
+  - Search and display posts by user  
+
+### 4. Git & GitHub Workflow
+- [ ] Commit code frequently.  
+- [ ] Track feature requests in GitHub issues.  
+- [ ] Use **feature branches** and **pull requests** to integrate changes.
+
+---
+
+## 👥 Contribution
+
+| Task Area | Martin Ferschl |
+|------------|------------------------------|
+| **1. REST API** | Implement all endpoints for submitting, retrieving, and searching posts |
+| **2. OpenAPI Spec** | Create OpenAPI/Swagger documentation for the API |
+| **3. Testing** | Expand testing framework to cover all API functionality |
+| **4. React Frontend** | Develop web frontend to submit, list, and search posts |
+| **5. Git & GitHub** | Commit frequently, track features, manage feature branches & pull requests |
+| **Branch** | `feature/react` |
 
