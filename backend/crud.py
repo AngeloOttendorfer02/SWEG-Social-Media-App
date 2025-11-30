@@ -4,6 +4,7 @@ from schemas import PostCreate
 from typing import Optional
 from datetime import datetime
 
+
 def create_post(db: Session, data: PostCreate, image_path: Optional[str]):
     post = Post(
         username=data.username,
