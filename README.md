@@ -1,55 +1,38 @@
-# 🧩 SWEG Social Media App – Exercise Part 1: Automation
+# 🧩 Exercise Part 3: Docker / Container Creation
 
-This project is the **first step in developing a simple social media application**.  
-The goal of this exercise is to design a small Python program that stores and retrieves social media posts from a database and to automate testing using GitHub Actions.
+This project focuses on **containerizing the social media application** to make it easy to deploy and compatible with other REST API definitions.  
+The goal is to package the REST API as a **Docker container** and automate container workflows with **GitHub Actions**.
 
 ---
 
 ## 📘 Exercise Description
 
 ### Objective
-Develop a Python application that can:
-- Store **social media posts** in a database containing:
-  - 🖼️ Image  
-  - 💬 Text (comment)  
-  - 👤 User  
-- Retrieve the **latest post** from the database.
-
+Develop a Docker container for the REST API and integrate GitHub Actions to automate the build and deployment process.  
+The application should be easy to deploy and run in any environment.
 
 ---
 
 ## ⚙️ Steps to Complete
- 
 
-### 1. Develop Python Application
-- [ ] Define the post information (image, text, user).  
-- [ ] Store multiple posts in a **SQLite database**.  
-- [ ] Implement functionality to **retrieve the latest post**.
+### 1. Docker Containerization
+- [ ] Create a **Dockerfile** for the REST API including:
+  - All necessary libraries and dependencies  
+  - Configuration for executing the API from Docker
+- [ ] Ensure the container can be **built and run locally** using Docker commands.
 
-### 2. Test the Application
-- [ ] Write unit tests to verify database storage and retrieval logic.  
-- [ ] Ensure the program runs correctly and returns the expected data.
-
-### 3. Configure GitHub Actions
+### 2. Automate with GitHub Actions
 - [ ] Create a **GitHub Actions workflow** that:
-  - Automatically runs tests on pull requests.  
-  - Ensures all tests pass before merging.  
-
-### 4. Final Steps
-- [ ] Commit all developed code and workflow configurations.  
-- [ ] Push the final version to GitHub.
+  - Automatically builds the Docker container on push or pull request  
+  - Pushes the container to a container registry (e.g., Docker Hub or GitHub Container Registry)  
+- [ ] Verify that the workflow runs correctly and the container is available in the registry.
 
 ---
 
 ## 👥 Contribution
 
 | Task Area | Angelo Ottendorfer | Martin Ferschl |
-|------------|------------------------------|--------------------------------|
-| **1. Python Application** | Implement `database.py` (SQLite setup, add/retrieve posts) | Support by testing functions manually |
-| **3. Testing** | Provide testable database functions | Create `tests/test_app.py` using `pytest` |
-| **4. GitHub Actions** | Review pipeline configuration | Create `.github/workflows/ci.yml` and ensure CI runs only on pull requests |
-| **5. Final Steps** | Commit app code | Commit tests + CI config and verify all tests pass |
-| **Branch** | `feature/backend` | `feature/tests-ci` |
-
-
-
+|------------|------------------------------|------------------------------|
+| **1. Docker Container** | Create Dockerfile and configure container to run REST API | - |
+| **2. GitHub Actions** | - | Implement CI workflow to build and push Docker container |
+| **Branch** | `feature/docker` | `feature/docker-ci` |
