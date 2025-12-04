@@ -32,20 +32,8 @@ The application should be easy to deploy and run in any environment.
 ## 👥 Contribution
 
 | Task Area | Angelo Ottendorfer | Martin Ferschl |
-<<<<<<< HEAD
 |------------|------------------------------|------------------------------|
 | **1. Docker Container** | Create Dockerfile and configure container to run REST API | - |
 | **2. GitHub Actions** | - | Implement CI workflow to build and push Docker container |
-| **Branch** | `feature/docker` | `feature/docker-ci` |
-=======
-|------------|------------------------------|--------------------------------|
-| **1. Python Application** | Implement `database.py` (SQLite setup, add/retrieve posts) | Support by testing functions manually |
-| **3. Testing** | Provide testable database functions | Create `tests/test_app.py` using `pytest` |
-| **4. GitHub Actions** | Review pipeline configuration | Create `.github/workflows/ci.yml` and ensure CI runs only on pull requests |
-| **5. Final Steps** | Commit app code | Commit tests + CI config and verify all tests pass |
-| **Branch** | `feature/backend` | `feature/tests-ci` |
-| **Time Required** | 0.5h - 1h | 0.5h - 1h |
-
-
-
->>>>>>> feature-testing
+| **Branch** | `feature/docker` | `feature/testing` |
+| **Time Required** | 2h | 3h |
