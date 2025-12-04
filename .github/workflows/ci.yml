@@ -59,7 +59,7 @@ jobs:
       - name: Build & Push Backend Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./docker
+          context: .
           file: ./docker/backend.Dockerfile
           push: true
           tags: ghcr.io/angeloottendorfer02/backend-app:latest
@@ -67,7 +67,7 @@ jobs:
       - name: Build & Push Frontend Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./docker
+          context: .
           file: ./docker/frontend.Dockerfile
           push: true
           tags: ghcr.io/angeloottendorfer02/frontend-app:latest
