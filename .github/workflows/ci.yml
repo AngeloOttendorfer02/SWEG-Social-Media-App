@@ -60,7 +60,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./docker/backend
-          file: ./docker/backend/backend.Dockerfile
+          file: ./docker/backend.Dockerfile
           push: true
           tags: ghcr.io/angeloottendorfer02/backend-app:latest
 
@@ -68,6 +68,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./docker/frontend
-          file: ./docker/frontend/frontend.Dockerfile
+          file: ./docker/frontend.Dockerfile
           push: true
           tags: ghcr.io/angeloottendorfer02/frontend-app:latest
