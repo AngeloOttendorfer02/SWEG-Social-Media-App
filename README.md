@@ -194,4 +194,5 @@ This allows the application to be **easily deployed and updated** without losing
 | **2. Environment Configuration** | Setup `.env` file and configure backend to use environment variables | - |
 | **3. Testing** | Test container orchestration and persistence | - |
 | **Branch** | `feature-testing` | - |
+| **Time Required** | 1h | - |
 
