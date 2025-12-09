@@ -145,3 +145,53 @@ The application should be easy to deploy and run in any environment.
 | **1. Docker Container** | Create Dockerfile and configure container to run REST API | - |
 | **2. GitHub Actions** | - | Implement CI workflow to build and push Docker container |
 | **Branch** | `feature/docker` | `feature/docker-ci` |
+
+
+# 🧩 Exercise Part 4: Container Orchestration
+
+This project focuses on **orchestrating the social media application** using Docker Compose.  
+The goal is to **separate the application logic from the data**, persist data across releases, and allow environment-specific configuration.
+
+---
+
+## 📘 Exercise Description
+
+### Objective
+Develop a Docker Compose setup that:
+
+- Separates containers for the **REST API**, **database**, and any other required infrastructure  
+- Persists data during container re-deployment  
+- Supports environment-specific configurations using a `.env` file  
+
+This allows the application to be **easily deployed and updated** without losing data.
+
+---
+
+## ⚙️ Steps to Complete
+
+### 1. Container Orchestration
+- [ ] Create a **Docker Compose file** that defines services for:
+  - Backend REST API  
+  - Frontend web application  
+  - Database (SQLite persisted via Docker volume)
+- [ ] Configure volumes to **persist data** across container restarts.  
+- [ ] Ensure services can communicate through the Docker network.  
+
+### 2. Environment Configuration
+- [ ] Create a `.env` file to define environment-specific variables:
+  - Backend and frontend ports  
+  - Database URL  
+  - Other configuration options
+- [ ] Ensure backend reads database configuration from environment variables.
+
+---
+
+## 👥 Contribution
+
+| Task Area | Angelo Ottendorfer | Martin Ferschl |
+|------------|------------------------------|------------------------------|
+| **1. Docker Compose Orchestration** | Configure backend, frontend, and volumes for data persistence | - |
+| **2. Environment Configuration** | Setup `.env` file and configure backend to use environment variables | - |
+| **3. Testing** | Test container orchestration and persistence | - |
+| **Branch** | `feature-testing` | - |
+
