@@ -1,18 +1,12 @@
-FROM node:22-bullseye AS build
+FROM node:20-alpine
 
-WORKDIR /frontend
+WORKDIR /app
 
-COPY ../frontend/package*.json ./
-
+COPY frontend/package*.json ./
 RUN npm install
 
-COPY ../frontend/ ./
+COPY frontend/ ./
 
-RUN npm run build
+EXPOSE 5173
 
-FROM nginx:stable
-
-COPY --from=build /frontend/dist /usr/share/nginx/html
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
