@@ -190,9 +190,9 @@ This allows the application to be **easily deployed and updated** without losing
 
 | Task Area | Angelo Ottendorfer | Martin Ferschl |
 |------------|------------------------------|------------------------------|
-| **1. Docker Compose Orchestration** | Configure backend, frontend, and volumes for data persistence | - |
-| **2. Environment Configuration** | Setup `.env` file and configure backend to use environment variables | - |
-| **3. Testing** | Test container orchestration and persistence | - |
-| **Branch** | `feature-testing` | - |
-| **Time Required** | 1h | - |
+| **1. Docker Compose Orchestration** | Configure backend, frontend, and volumes for data persistence | Adapted files for postgres addition |
+| **2. Environment Configuration** | Setup `.env` file and configure backend to use environment variables | Added postgres as seperate container for data storage |
+| **3. Testing** | Test container orchestration and persistence | Tested orchestration with now 3 containers, persistent data |
+| **Branch** | `feature-testing` | 'feature-postgres' |
+| **Time Required** | 1h | ~1h |
 
