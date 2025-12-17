@@ -13,6 +13,7 @@ services:
       API_PORT: ${BACKEND_PORT}
     depends_on:
       - db
+      - rabbitmq
     volumes:
       - backend_data:/app
       - images_data:/backend/images
@@ -35,6 +36,20 @@ services:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     restart: unless-stopped
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: sweg_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - "5672:5672"     # AMQP (used by backend + resize service)
+      - "15672:15672"   # Web management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+
+
   db:
     image: postgres:15
     container_name: sweg_db
@@ -52,3 +67,4 @@ volumes:
   backend_data:
   images_data:
   db_data:
+  rabbitmq_data:

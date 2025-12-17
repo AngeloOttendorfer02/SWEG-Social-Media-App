@@ -8,7 +8,7 @@ from typing import Optional, List
 import crud
 from uuid import uuid4
 from fastapi.staticfiles import StaticFiles
-
+from rabbitmq_client import send_test_message
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -74,3 +74,8 @@ def delete_post(post_id: int, db: Session = Depends(get_db)):
     if not deleted:
         raise HTTPException(status_code=404, detail="Post not found")
     return {"message": "Post deleted"}
+
+@app.get("/test-queue")
+def test_queue():
+    send_test_message()
+    return {"status": "message sent"}
