@@ -29,7 +29,7 @@ export default function PostList({ posts, refreshPosts }) {
 
           {post.image_path && (
             <img
-              src={`http://127.0.0.1:8000/${post.image_path}`}
+              src={`${API.defaults.baseURL}/${post.resized_image_path || post.image_path}`}
               alt="uploaded"
               width="200"
             />

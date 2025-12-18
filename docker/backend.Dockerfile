@@ -1,13 +1,12 @@
 FROM python:3.11-slim
 
 WORKDIR /backend
-RUN mkdir -p /backend/images
 
 COPY ../requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir fastapi uvicorn pika pillow sqlalchemy psycopg2-binary
 
-COPY ../backend/ ./
-COPY ../backend/images ./images 
+COPY ../backend/ .
 
 EXPOSE 8000
 
