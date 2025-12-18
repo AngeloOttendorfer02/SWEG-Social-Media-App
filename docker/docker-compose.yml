@@ -2,9 +2,7 @@ version: "3.9"
 
 services:
   backend:
-    build:
-      context: ..
-      dockerfile: docker/backend.Dockerfile
+    image: ghcr.io/angeloottendorfer02/sweg-social-media-app/backend:latest
     container_name: sweg_backend
     env_file:
       - .env
@@ -23,9 +21,7 @@ services:
     restart: unless-stopped
 
   worker:
-    build:
-      context: ..
-      dockerfile: docker/backend.Dockerfile
+    image: ghcr.io/angeloottendorfer02/sweg-social-media-app/worker:latest
     container_name: sweg_worker
     env_file:
       - .env
@@ -43,9 +39,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    build:
-      context: ..
-      dockerfile: docker/frontend.Dockerfile
+    image: ghcr.io/angeloottendorfer02/sweg-social-media-app/frontend:latest
     container_name: sweg_frontend
     env_file:
       - .env

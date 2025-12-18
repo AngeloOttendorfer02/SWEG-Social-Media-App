@@ -84,7 +84,9 @@ jobs:
           context: .
           file: ./docker/backend.Dockerfile
           push: true
-          tags: ghcr.io/angeloottendorfer02/sweg-social-media-app/backend:latest
+          tags: |
+            ghcr.io/angeloottendorfer02/sweg-social-media-app/backend:latest
+            ghcr.io/angeloottendorfer02/sweg-social-media-app/worker:latest
 
       - name: Build & Push Frontend Docker image
         uses: docker/build-push-action@v6
@@ -93,11 +95,3 @@ jobs:
           file: ./docker/frontend.Dockerfile
           push: true
           tags: ghcr.io/angeloottendorfer02/sweg-social-media-app/frontend:latest
-
-      - name: Build & Push Worker Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./docker/backend.Dockerfile
-          push: true
-          tags: ghcr.io/angeloottendorfer02/sweg-social-media-app/worker:latest
