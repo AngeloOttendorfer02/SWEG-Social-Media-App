@@ -1,56 +1,65 @@
-# 🧩 SWEG Social Media App – Exercise Part 1: Automation
+# 🧩 Exercise Part 5: Event-Driven Architecture
 
-This project is the **first step in developing a simple social media application**.  
-The goal of this exercise is to design a small Python program that stores and retrieves social media posts from a database and to automate testing using GitHub Actions.
+This exercise extends the social media application with an **event-driven architecture** to improve image loading performance.  
+Instead of serving only full-size images, the application now processes images asynchronously to generate **reduced-size versions** using a dedicated microservice triggered by a **message queue**.
 
 ---
 
 ## 📘 Exercise Description
 
 ### Objective
-Develop a Python application that can:
-- Store **social media posts** in a database containing:
-  - 🖼️ Image  
-  - 💬 Text (comment)  
-  - 👤 User  
-- Retrieve the **latest post** from the database.
+Enhance the application by introducing an **image processing microservice** that:
 
+- Stores both **full-size** and **reduced-size** images  
+- Uses a **message queue** to trigger image resizing asynchronously  
+- Separates image processing logic into an independent container  
+- Updates the REST API and frontend to support optimized image delivery  
+
+This approach improves scalability, performance, and user experience.
 
 ---
 
 ## ⚙️ Steps to Complete
- 
 
-### 1. Develop Python Application
-- [ ] Define the post information (image, text, user).  
-- [ ] Store multiple posts in a **SQLite database**.  
-- [ ] Implement functionality to **retrieve the latest post**.
+### 1. Event-Driven Image Processing
+- [ ] Store both **original** and **resized** versions of uploaded images  
+- [ ] Submit image-processing tasks to a **message queue** after image upload  
+- [ ] Implement a **separate image resize service** that:
+  - Listens to the queue  
+  - Processes images asynchronously  
+  - Stores the resized image  
 
-### 2. Test the Application
-- [ ] Write unit tests to verify database storage and retrieval logic.  
-- [ ] Ensure the program runs correctly and returns the expected data.
+### 2. Microservice Architecture
+- [ ] Provide the image resize functionality as a **dedicated container**  
+- [ ] Integrate the image processing service into the existing Docker Compose setup  
+- [ ] Ensure services communicate via the message queue  
 
-### 3. Configure GitHub Actions
-- [ ] Create a **GitHub Actions workflow** that:
-  - Automatically runs tests on pull requests.  
-  - Ensures all tests pass before merging.  
+### 3. API and Frontend Updates
+- [ ] Extend the **REST API** to:
+  - Serve full-size images  
+  - Serve reduced-size images  
+- [ ] Update the REST API + WebApp as needed to enable reduced-size + full-size images  
 
-### 4. Final Steps
-- [ ] Commit all developed code and workflow configurations.  
-- [ ] Push the final version to GitHub.
+### 4. Automation with GitHub Actions
+- [ ] Add **unit and integration tests** for:
+  - Backend API  
+  - Image processing service  
+- [ ] Create GitHub Actions workflows to:
+  - Automatically test all services  
+  - Build and push Docker images for:
+    - Backend  
+    - Frontend  
+    - Image processing service  
 
 ---
 
 ## 👥 Contribution
 
 | Task Area | Angelo Ottendorfer | Martin Ferschl |
-|------------|------------------------------|--------------------------------|
-| **1. Python Application** | Implement `database.py` (SQLite setup, add/retrieve posts) | Support by testing functions manually |
-| **3. Testing** | Provide testable database functions | Create `tests/test_app.py` using `pytest` |
-| **4. GitHub Actions** | Review pipeline configuration | Create `.github/workflows/ci.yml` and ensure CI runs only on pull requests |
-| **5. Final Steps** | Commit app code | Commit tests + CI config and verify all tests pass |
-| **Branch** | `feature/backend` | `feature/tests-ci` |
-| **Time Required** | 0.5h - 1h | 0.5h - 1h |
-
-
-
+|------------|------------------------------|------------------------------|
+| **1. Event-Driven Design** | - | Design message queue integration |
+| **2. Image Processing Service** | Implement image resize microservice | - |
+| **3. REST API & Frontend Updates** | Extend API and frontend for image handling | - |
+| **4. GitHub Actions** | - | Configure CI workflows for testing and container publishing |
+| **Branch** | `feature-messagequeue` | `feature-messagequeue`, `feature-testing` |
+| **Time Required** | 4h |  |
