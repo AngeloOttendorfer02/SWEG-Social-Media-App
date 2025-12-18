@@ -9,7 +9,9 @@ import crud
 from uuid import uuid4
 from fastapi.staticfiles import StaticFiles
 import json
-from rabbitmq_client import get_channel
+from rabbitmq_client import get_channel, send_test_message
+from fastapi.responses import FileResponse
+import pika
 
 create_tables()
 
@@ -89,7 +91,6 @@ async def create_post(
     post = crud.create_post(db, post_data, image_path)
 
     if image:
-        import pika
         connection, channel = get_channel()
         message = {"post_id": post.id, "filename": filename}
         channel.basic_publish(

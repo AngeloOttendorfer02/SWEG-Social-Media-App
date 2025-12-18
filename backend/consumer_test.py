@@ -15,8 +15,8 @@ channel = connection.channel()
 channel.queue_declare(queue="image_resize", durable=True)
 
 def callback(ch, method, properties, body):
-    message = json.loads(body)
-    print("📥 Received message:", message)
+    message = json.loads(body.decode("utf-8"))
+    print("Received message:", message)
 
     # acknowledge message so RabbitMQ removes it
     ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -26,5 +26,5 @@ channel.basic_consume(
     on_message_callback=callback
 )
 
-print("👂 Waiting for messages...")
+print("Waiting for messages...")
 channel.start_consuming()

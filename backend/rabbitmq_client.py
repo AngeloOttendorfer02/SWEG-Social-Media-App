@@ -40,7 +40,7 @@ def send_test_message():
         )
     )
 
-    print("✅ Sent test message to queue")
+    print("Sent test message to queue")
 
     connection.close()
 

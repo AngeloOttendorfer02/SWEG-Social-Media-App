@@ -13,7 +13,7 @@ jobs:
   test:
     name: Run pytest
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    #if: github.event_name == 'pull_request'
 
     steps:
       - name: Checkout repository
@@ -33,9 +33,10 @@ jobs:
         run: python -m pytest -q
 
   docker:
+    needs: test
     name: Build & Push Docker Images (GHCR)
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/feature-testing'
+    #if: github.event_name == 'push' && github.ref == 'refs/heads/feature-testing'
 
     permissions:
       contents: read
