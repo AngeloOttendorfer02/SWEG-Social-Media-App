@@ -260,4 +260,4 @@ This approach improves scalability, performance, and user experience.
 | **3. REST API & Frontend Updates** | Extend API and frontend for image handling | - |
 | **4. GitHub Actions** | - | Configure CI workflows for testing and container publishing |
 | **Branch** | `feature-messagequeue` | `feature-messagequeue`, `feature-testing` |
-| **Time Required** | 4h |  |
+| **Time Required** | 4h | ~3h |
