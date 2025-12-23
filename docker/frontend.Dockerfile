@@ -2,12 +2,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY frontend/package*.json ./
+COPY package*.json ./
 RUN npm install
 
-COPY frontend/ ./
-
-ENV VITE_API_URL=http://localhost:8000
+COPY . .
 
 EXPOSE 5173
 

@@ -1,43 +1,25 @@
-import React, { useEffect, useState } from "react";
-import API from "./api";
-import PostForm from "./components/PostForm";
-import PostList from "./components/PostList";
+import { Routes, Route } from "react-router-dom";
+import HomePage from "../pages/HomePage";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
+import FeedPage from "../pages/FeedPage";
+import ProtectedRoute from "../src/components/ProtectedRoute";
 
 export default function App() {
-  const [posts, setPosts] = useState([]);
-  const [filterUser, setFilterUser] = useState("");
-
-  const loadPosts = async () => {
-    let response;
-
-    if (filterUser.trim() === "") {
-      response = await API.get("/get-all-posts");
-    } else {
-      response = await API.get(`/get-all-posts-by-user/${filterUser}`);
-    }
-
-    setPosts(response.data);
-  };
-
-  useEffect(() => {
-    loadPosts();
-  }, [filterUser]);
-
   return (
-    <div style={{ width: "600px", margin: "0 auto", padding: "20px" }}>
-      <h1>Social Media App</h1>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
-      <PostForm onPostCreated={loadPosts} />
-
-      <input
-        type="text"
-        placeholder="Filter by username"
-        value={filterUser}
-        onChange={(e) => setFilterUser(e.target.value)}
-        style={{ marginBottom: "20px", width: "100%" }}
+      <Route
+        path="/feed"
+        element={
+          <ProtectedRoute>
+            <FeedPage />
+          </ProtectedRoute>
+        }
       />
-
-      <PostList posts={posts} refreshPosts={loadPosts} />
-    </div>
+    </Routes>
   );
 }

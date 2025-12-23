@@ -2,11 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR /backend
 
-COPY ../requirements.txt .
+COPY ../requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir fastapi uvicorn pika pillow sqlalchemy psycopg2-binary
+RUN pip install --no-cache-dir fastapi uvicorn pika pillow sqlalchemy python-multipart psycopg2-binary passlib[pbkdf2_sha256] python-jose[cryptography]
 
-COPY ../backend/ .
+COPY . .
 
 EXPOSE 8000
 
