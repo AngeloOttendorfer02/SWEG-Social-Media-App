@@ -1,3 +1,4 @@
+pytest
 pika
 transformers
 torch
