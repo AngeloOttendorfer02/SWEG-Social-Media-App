@@ -1,65 +1,74 @@
-# 🧩 Exercise Part 5: Event-Driven Architecture
+# 🧠 Exercise Part 6: Event-Driven Machine Learning Services
 
-This exercise extends the social media application with an **event-driven architecture** to improve image loading performance.  
-Instead of serving only full-size images, the application now processes images asynchronously to generate **reduced-size versions** using a dedicated microservice triggered by a **message queue**.
+This exercise extends the social media application by introducing **machine-learning–based microservices** to enhance user experience.  
+Pre-trained **GPT-2 / DistilGPT-2 models** are integrated into the system to provide **sentiment analysis** and **text generation**, leveraging an **event-driven architecture** for asynchronous processing.
 
 ---
 
 ## 📘 Exercise Description
 
 ### Objective
-Enhance the application by introducing an **image processing microservice** that:
+Enhance the application by introducing **ML-powered microservices** that:
 
-- Stores both **full-size** and **reduced-size** images  
-- Uses a **message queue** to trigger image resizing asynchronously  
-- Separates image processing logic into an independent container  
-- Updates the REST API and frontend to support optimized image delivery  
+- Analyze user-generated content using **sentiment analysis**
+- Generate **context-aware reply suggestions**
+- Process ML tasks asynchronously using a **message queue**
+- Store additional ML metadata in the database
+- Integrate seamlessly into the existing microservice architecture
 
-This approach improves scalability, performance, and user experience.
+This approach improves scalability, responsiveness, and user engagement while demonstrating real-world ML system design.
 
 ---
 
 ## ⚙️ Steps to Complete
 
-### 1. Event-Driven Image Processing
-- [ ] Store both **original** and **resized** versions of uploaded images  
-- [ ] Submit image-processing tasks to a **message queue** after image upload  
-- [ ] Implement a **separate image resize service** that:
-  - Listens to the queue  
-  - Processes images asynchronously  
-  - Stores the resized image  
+### 1. Event-Driven ML Processing
+- [x] Submit text-analysis tasks to a **message queue** after post creation  
+- [x] Perform **sentiment analysis** asynchronously using a pre-trained GPT-2 model  
+- [x] Compute and store a **confidence score** for the sentiment prediction  
+- [x] Generate **reply suggestions** using a GPT-based language model  
 
-### 2. Microservice Architecture
-- [ ] Provide the image resize functionality as a **dedicated container**  
-- [ ] Integrate the image processing service into the existing Docker Compose setup  
-- [ ] Ensure services communicate via the message queue  
-
-### 3. API and Frontend Updates
-- [ ] Extend the **REST API** to:
-  - Serve full-size images  
-  - Serve reduced-size images  
-- [ ] Update the REST API + WebApp as needed to enable reduced-size + full-size images  
-
-### 4. Automation with GitHub Actions
-- [ ] Add **unit and integration tests** for:
-  - Backend API  
-  - Image processing service  
-- [ ] Create GitHub Actions workflows to:
-  - Automatically test all services  
-  - Build and push Docker images for:
-    - Backend  
-    - Frontend  
-    - Image processing service  
+Sentiment analysis is handled asynchronously via RabbitMQ, ensuring non-blocking API responses.
 
 ---
 
-## 👥 Contribution
+### 2. Microservice Architecture
+- [x] Implement ML inference as a **dedicated GPT-2 worker service**
+- [x] Separate ML logic from the main backend service
+- [x] Integrate the ML worker into the existing **Docker Compose** setup
+- [x] Ensure services communicate exclusively via a **message queue**
 
-| Task Area | Angelo Ottendorfer | Martin Ferschl |
-|------------|------------------------------|------------------------------|
-| **1. Event-Driven Design** | - | Design message queue integration |
-| **2. Image Processing Service** | Implement image resize microservice | - |
-| **3. REST API & Frontend Updates** | Extend API and frontend for image handling | - |
-| **4. GitHub Actions** | - | Configure CI workflows for testing and container publishing |
-| **Branch** | `feature-messagequeue` | `feature-messagequeue`, `feature-testing` |
-| **Time Required** | 4h |  |
+---
+
+### 3. API, Database, and Frontend Updates
+- [x] Extend the database schema to store:
+  - Sentiment label  
+  - Sentiment confidence score  
+- [x] Adapt REST API endpoints to expose ML-enriched post data  
+- [x] Add a **sentiment badge** to the frontend UI  
+- [x] Enable **on-demand reply suggestion generation** from the frontend  
+- [x] Display AI-generated suggestions directly in the WebApp  
+
+---
+
+### 4. Container Orchestration
+- [x] Add ML worker service to container orchestration
+- [x] Ensure reproducible environments for:
+  - Backend
+  - Frontend
+  - GPT-2 worker
+  - Message broker (RabbitMQ)
+
+---
+
+## 🧠 ML Models Used
+
+- **DistilGPT-2**
+  - Faster inference
+  - Lower memory footprint
+  - Suitable for real-time applications
+- Hugging Face `transformers` library
+
+---
+
+## 👥 Time Required ~6–8 hours
