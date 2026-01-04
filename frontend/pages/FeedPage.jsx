@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import PostForm from "../src/components/PostForm";
 import PostList from "../src/components/PostList";
-import { fetchAllPosts } from "../src/api";
+import { fetchAllPosts, suggestReply } from "../src/api";
 import { useAuth } from "../src/context/AuthContext";
 import "../src/styles/feedpage.css";
 import { useNavigate } from "react-router-dom";
 
 export default function FeedPage() {
     const [posts, setPosts] = useState([]);
+    const [suggestedText, setSuggestedText] = useState("");
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
@@ -17,6 +18,22 @@ export default function FeedPage() {
             setPosts(response.data.reverse());
         } catch (err) {
             console.error("Error fetching posts:", err);
+        }
+    };
+
+    const suggestReplyForPost = async (postId) => {
+        try {
+            await suggestReply(postId);
+            setTimeout(async () => {
+                const response = await fetchAllPosts();
+                setPosts(response.data.reverse());
+                const updatedPost = response.data.find(p => p.id === postId);
+                if (updatedPost?.suggested_reply) {
+                    setSuggestedText(updatedPost.suggested_reply);
+                }
+            }, 3000);
+        } catch (err) {
+            alert(err.response?.data?.detail || "Failed to generate reply suggestion");
         }
     };
 
@@ -38,13 +55,13 @@ export default function FeedPage() {
                     <span className="username font-medium">{user?.username}</span>
                     <button
                         onClick={() => navigate("/")}
-                        className="header-button bg-white text-purple-600 hover:bg-gray-100"
+                        className="home-button"
                     >
                         Home
                     </button>
                     <button
                         onClick={logout}
-                        className="header-button bg-red-500 hover:bg-red-600 text-white"
+                        className="logout-button"
                     >
                         Logout
                     </button>
@@ -53,8 +70,8 @@ export default function FeedPage() {
 
             {/* Main Content */}
             <main className="feed-main p-4">
-                <PostForm refreshPosts={loadPosts} />
-                <PostList posts={posts} refreshPosts={loadPosts} />
+                <PostForm refreshPosts={loadPosts} suggestedText={suggestedText} />
+                <PostList posts={posts} refreshPosts={loadPosts} suggestReplyForPost={suggestReplyForPost} />
             </main>
         </div>
     );

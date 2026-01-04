@@ -1,3 +1,4 @@
+from multiprocessing.dummy import connection
 import os
 import json
 from fastapi import FastAPI, UploadFile, File, Form, Depends, HTTPException
@@ -11,7 +12,8 @@ import pika
 from database import get_db, create_tables
 import crud
 import models
-from schemas import PostResponse, PostBase, UserCreate, UserResponse, Token
+from schemas import PostResponse, PostBase, UserCreate, Token, SuggestReplyRequest
+
 from rabbitmq_client import get_channel
 from auth import create_access_token, get_current_user
 
@@ -83,8 +85,47 @@ async def create_post(
             properties=pika.BasicProperties(delivery_mode=2),
         )
         connection.close()
+    
+    connection, channel = get_channel()
+    channel.queue_declare(queue="sentiment_analysis", durable=True)
+
+    channel.basic_publish(
+        exchange="",
+        routing_key="sentiment_analysis",
+        body=json.dumps({
+            "post_id": post.id,
+            "text": post.text
+        }),
+        properties=pika.BasicProperties(delivery_mode=2),
+    )
+    connection.close()
 
     return post
+
+@app.post("/suggest-reply")
+async def suggest_reply(
+    payload: SuggestReplyRequest,
+    db: Session = Depends(get_db),
+):
+    post = db.query(models.Post).filter(models.Post.id == payload.post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    connection, channel = get_channel()
+
+    channel.basic_publish(
+        exchange="",
+        routing_key="sentiment_analysis",
+        body=json.dumps({
+            "post_id": post.id,
+            "text": post.text
+        }),
+        properties=pika.BasicProperties(delivery_mode=2),
+    )
+
+    connection.close()
+
+    return {"status": "generation_started"}
 
 
 @app.get("/get-all-posts", response_model=List[PostResponse])

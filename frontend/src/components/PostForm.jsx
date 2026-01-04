@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPost } from "../api";
 import { useAuth } from "../context/AuthContext";
 
-export default function PostForm({ refreshPosts }) {
+export default function PostForm({ refreshPosts, suggestedText }) {
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const { token, user } = useAuth();
+  const { token } = useAuth();
+
+  useEffect(() => {
+    if (suggestedText) {
+      setContent(suggestedText);
+    }
+  }, [suggestedText]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -32,7 +38,7 @@ export default function PostForm({ refreshPosts }) {
       setContent("");
       setFile(null);
       setPreview(null);
-      setTimeout(() => refreshPosts(), 500);
+      refreshPosts();
     } catch (err) {
       alert(err.response?.data?.detail || "Failed to create post");
     }
@@ -51,7 +57,6 @@ export default function PostForm({ refreshPosts }) {
         rows={4}
       />
 
-      {/* File Input */}
       <label className="file-label flex items-center justify-center gap-2 p-2 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 transition">
         <span>{file ? file.name : "Attach an image"}</span>
         <input
@@ -62,7 +67,6 @@ export default function PostForm({ refreshPosts }) {
         />
       </label>
 
-      {/* Preview */}
       {preview && (
         <div className="image-preview mt-2">
           <img

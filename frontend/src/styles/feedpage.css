@@ -45,29 +45,33 @@
     padding: 0.5rem 1.2rem;
     border-radius: 9999px;
     font-weight: 600;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
     cursor: pointer;
+    border: none;
+    font-size: 0.9rem;
 }
 
 .logout-button {
-    background-color: #ec4899;
+    background: linear-gradient(to right, #ec4899, #f97316);
     color: white;
 }
 
 .logout-button:hover {
-    background-color: #db2777;
-    transform: translateY(-1px);
+    background: linear-gradient(to right, #db2777, #ea580c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 .home-button {
-    background-color: #7c3aed;
+    background: linear-gradient(to right, #7c3aed, #3b82f6);
     color: white;
 }
 
 .home-button:hover {
-    background-color: #6d28d9;
-    transform: translateY(-1px);
+    background: linear-gradient(to right, #6d28d9, #2563eb);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Main Content */

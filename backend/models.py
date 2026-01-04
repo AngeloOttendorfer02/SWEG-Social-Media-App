@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Float, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
@@ -23,6 +23,10 @@ class Post(Base):
     text = Column(String)
     image_path = Column(String, nullable=True)
     resized_image_path = Column(String, nullable=True)
+    sentiment = Column(String, nullable=True)
+    sentiment_score = Column(String, nullable=True)  
+    suggested_reply = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    
 
     user = relationship("User", back_populates="posts")

@@ -25,6 +25,9 @@ class PostResponse(BaseModel):
     text: str
     image_path: Optional[str]
     resized_image_path: Optional[str]
+    sentiment: Optional[str]
+    sentiment_score: Optional[str]
+    suggested_reply: Optional[str]
     created_at: datetime
     user: UserResponse
 
@@ -35,6 +38,9 @@ class PostResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class SuggestReplyRequest(BaseModel):
+    post_id: int
 
 
 class Token(BaseModel):

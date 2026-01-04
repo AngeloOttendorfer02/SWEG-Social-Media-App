@@ -35,4 +35,10 @@ export const deletePost = (postId, token) =>
         },
     });
 
+
+export const suggestReply = async (postId) => {
+    const res = await API.post("/suggest-reply", { post_id: postId });
+    return res.data;
+};
+
 export default API;
