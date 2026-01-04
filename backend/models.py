@@ -1,14 +1,32 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Float, Integer, String, DateTime, ForeignKey, Text
+from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    posts = relationship("Post", back_populates="user", cascade="all, delete")
 
 
 class Post(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     text = Column(String)
     image_path = Column(String, nullable=True)
     resized_image_path = Column(String, nullable=True)
+    sentiment = Column(String, nullable=True)
+    sentiment_score = Column(String, nullable=True)  
+    suggested_reply = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    
+
+    user = relationship("User", back_populates="posts")

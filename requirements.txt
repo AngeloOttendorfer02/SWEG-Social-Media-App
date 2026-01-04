@@ -1,8 +1,12 @@
 pytest
-fastapi
-uvicorn[standard]
-sqlalchemy
+fastapi==0.111.1
+uvicorn[standard]==0.23.1
+sqlalchemy==2.0.23
 python-multipart
 psycopg2-binary
 pika
 pillow
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]
+transformers
+torch

@@ -1,29 +1,26 @@
+from multiprocessing.dummy import connection
 import os
+import json
 from fastapi import FastAPI, UploadFile, File, Form, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from database import get_db, create_tables, Base, engine
-from schemas import PostResponse, PostBase
-from typing import Optional, List
-import crud
-from uuid import uuid4
 from fastapi.staticfiles import StaticFiles
-import json
-from rabbitmq_client import get_channel, send_test_message
-from fastapi.responses import FileResponse
+from sqlalchemy.orm import Session
+from typing import Optional, List
+from uuid import uuid4
 import pika
+
+from database import get_db, create_tables
+import crud
+import models
+from schemas import PostResponse, PostBase, UserCreate, Token, SuggestReplyRequest
+
+from rabbitmq_client import get_channel
+from auth import create_access_token, get_current_user
 
 create_tables()
 
 app = FastAPI()
 
-FULL_DIR = "/backend/images/full"
-RESIZED_DIR = "/backend/images/resized"
-
-os.makedirs(FULL_DIR, exist_ok=True)
-os.makedirs(RESIZED_DIR, exist_ok=True)
-
-app.mount("/images", StaticFiles(directory="images"), name="images")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -32,76 +29,103 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.post("/upload-image/")
-async def upload_image(file: UploadFile):
-    filename = f"{uuid4()}.jpg"
-    full_path = os.path.join(FULL_DIR, filename)
-
-    with open(full_path, "wb") as f:
-        f.write(await file.read())
-
-    connection, channel = get_channel()
-    message = {"filename": filename}
-    channel.basic_publish(
-        exchange="",
-        routing_key="image_resize",
-        body=json.dumps(message).encode("utf-8"),
-        properties=pika.BasicProperties(delivery_mode=2)
-    )
-    connection.close()
-
-    return {"filename": filename, "status": "queued"}
+app.mount("/images", StaticFiles(directory="images"), name="images")
 
 
-@app.get("/images/{size}/{filename}")
-async def get_image(size: str, filename: str):
-    if size not in ["full", "resized"]:
-        return {"error": "Invalid size"}
-    path = os.path.join(f"/backend/images/{size}", filename)
-    return FileResponse(path)
+@app.post("/register", response_model=Token)
+def register(user: UserCreate, db: Session = Depends(get_db)):
+    existing = db.query(models.User).filter(models.User.username == user.username).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Username already exists")
+    
+    new_user = crud.create_user(db, user.username, user.password)
+    
+    token = create_access_token({"sub": new_user.username})
+    return {"access_token": token, "token_type": "bearer"}
 
 
-# Ensure images folder exists
-if not os.path.exists("images"):
-    os.makedirs("images")
+@app.post("/login", response_model=Token)
+def login(user: UserCreate, db: Session = Depends(get_db)):
+    authenticated = crud.authenticate_user(db, user.username, user.password)
+    if not authenticated:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    # Create token without expires_delta
+    token = create_access_token({"sub": authenticated.username})
+    return {"access_token": token, "token_type": "bearer"}
 
 
 @app.post("/create-post", response_model=PostResponse)
 async def create_post(
-    username: str = Form(...),
     text: str = Form(...),
     image: Optional[UploadFile] = File(None),
-    db: Session = Depends(get_db)
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
-
     image_path = None
+    filename = None
 
     if image:
         file_ext = image.filename.split(".")[-1]
         filename = f"{uuid4()}.{file_ext}"
         file_location = f"images/full/{filename}"
-
         with open(file_location, "wb") as f:
             f.write(await image.read())
-
         image_path = file_location
 
-    post_data = PostBase(username=username, text=text)
-    post = crud.create_post(db, post_data, image_path)
+    post_data = PostBase(username=current_user.username, text=text)
+    post = crud.create_post(db, current_user, text, image_path)
 
     if image:
         connection, channel = get_channel()
-        message = {"post_id": post.id, "filename": filename}
         channel.basic_publish(
             exchange="",
             routing_key="image_resize",
-            body=json.dumps(message).encode("utf-8"),
-            properties=pika.BasicProperties(delivery_mode=2)
+            body=json.dumps({"post_id": post.id, "filename": filename}),
+            properties=pika.BasicProperties(delivery_mode=2),
         )
         connection.close()
+    
+    connection, channel = get_channel()
+    channel.queue_declare(queue="sentiment_analysis", durable=True)
+
+    channel.basic_publish(
+        exchange="",
+        routing_key="sentiment_analysis",
+        body=json.dumps({
+            "post_id": post.id,
+            "text": post.text
+        }),
+        properties=pika.BasicProperties(delivery_mode=2),
+    )
+    connection.close()
 
     return post
+
+@app.post("/suggest-reply")
+async def suggest_reply(
+    payload: SuggestReplyRequest,
+    db: Session = Depends(get_db),
+):
+    post = db.query(models.Post).filter(models.Post.id == payload.post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    connection, channel = get_channel()
+
+    channel.basic_publish(
+        exchange="",
+        routing_key="sentiment_analysis",
+        body=json.dumps({
+            "post_id": post.id,
+            "text": post.text
+        }),
+        properties=pika.BasicProperties(delivery_mode=2),
+    )
+
+    connection.close()
+
+    return {"status": "generation_started"}
 
 
 @app.get("/get-all-posts", response_model=List[PostResponse])
@@ -109,20 +133,21 @@ def get_all_posts(db: Session = Depends(get_db)):
     return crud.get_all_posts(db)
 
 
-@app.get("/get-all-posts-by-user/{username}", response_model=List[PostResponse])
-def get_posts_by_user(username: str, db: Session = Depends(get_db)):
-    return crud.get_posts_by_user(db, username)
-
-
 @app.delete("/delete-post/{post_id}")
-def delete_post(post_id: int, db: Session = Depends(get_db)):
-    deleted = crud.delete_post(db, post_id)
-    if not deleted:
+def delete_post(
+    post_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+
+    if not post:
         raise HTTPException(status_code=404, detail="Post not found")
-    return {"message": "Post deleted"}
 
+    if post.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this post")
 
-@app.get("/test-queue")
-def test_queue():
-    send_test_message()
-    return {"status": "message sent"}
+    db.delete(post)
+    db.commit()
+
+    return {"detail": "Post deleted successfully"}

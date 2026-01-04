@@ -2,7 +2,9 @@ version: "3.9"
 
 services:
   backend:
-    image: ghcr.io/angeloottendorfer02/sweg-social-media-app/backend:latest
+    build:
+      context: ..
+      dockerfile: docker/backend.Dockerfile
     container_name: sweg_backend
     env_file:
       - .env
@@ -16,12 +18,15 @@ services:
         condition: service_started
     volumes:
       - images_data:/backend/images
+      - ../backend:/backend
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     restart: unless-stopped
 
   worker:
-    image: ghcr.io/angeloottendorfer02/sweg-social-media-app/worker:latest
+    build:
+      context: ..
+      dockerfile: docker/backend.Dockerfile
     container_name: sweg_worker
     env_file:
       - .env
@@ -36,10 +41,13 @@ services:
         condition: service_healthy
     volumes:
       - images_data:/backend/images
+      - ../backend:/backend
     restart: unless-stopped
 
   frontend:
-    image: ghcr.io/angeloottendorfer02/sweg-social-media-app/frontend:latest
+    build:
+      context: ..
+      dockerfile: docker/frontend.Dockerfile
     container_name: sweg_frontend
     env_file:
       - .env
@@ -49,6 +57,9 @@ services:
       - backend
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
     restart: unless-stopped
 
   rabbitmq:
@@ -62,6 +73,26 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+
+  gpt_worker:
+    build:
+      context: ..
+      dockerfile: docker/backend.Dockerfile
+    container_name: sweg_gpt_worker
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      RABBITMQ_URL: amqp://user:password@rabbitmq:5672/
+    command: python gpt_worker.py
+    depends_on:
+      rabbitmq:
+        condition: service_started
+      db:
+        condition: service_healthy
+    volumes:
+      - ../backend:/backend
     restart: unless-stopped
 
   db:

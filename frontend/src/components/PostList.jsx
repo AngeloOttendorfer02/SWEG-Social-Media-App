@@ -1,43 +1,16 @@
 import React from "react";
-import API from "../api";
+import PostCard from "./PostCard";
 
-export default function PostList({ posts, refreshPosts }) {
-  const deletePost = async (id) => {
-    await API.delete(`/delete-post/${id}`);
-    refreshPosts();
-  };
-
+export default function PostList({ posts, refreshPosts, suggestReplyForPost }) {
   return (
-    <div>
-      <h2>All Posts</h2>
-
-      {posts.length === 0 && <p>No posts yet.</p>}
-
-      {posts.map((post) => (
-        <div
-          key={post.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            marginBottom: "10px",
-          }}
-        >
-          <p>
-            <strong>{post.username}</strong>
-          </p>
-          <p>{post.text}</p>
-
-          {post.image_path && (
-            <img
-              src={`${API.defaults.baseURL}/${post.resized_image_path || post.image_path}`}
-              alt="uploaded"
-              width="200"
-            />
-          )}
-
-          <button onClick={() => deletePost(post.id)}>Delete</button>
-        </div>
-      ))}
+    <div className="flex flex-col">
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <PostCard key={post.id} post={post} refreshPosts={refreshPosts} suggestReplyForPost={suggestReplyForPost} />
+        ))
+      ) : (
+        <p className="text-gray-500 text-center mt-6">No posts yet. Be the first to post!</p>
+      )}
     </div>
   );
 }
